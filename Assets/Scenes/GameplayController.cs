@@ -5,10 +5,17 @@ public class GameplayController: MonoBehaviour {
     public GameObject researchScoreParticle;
     public ScoreBulb scienceScoreBulb;
     public GameObject scienceScoreParticle;
+    public ModulePlace[] modulePlaces;
 
     private RectTransform canvasRect;
     void Start () { 
         canvasRect = GetComponent<RectTransform>();
+        RestoreProgress();
+    }
+
+    void RestoreProgress () {
+        modulePlaces[2].Type = ModulePlaceType.Eniac;
+        modulePlaces[3].Type = ModulePlaceType.Eniac;
     }
 
     public void IncrementScienceScore (GameObject source, int delta) {
