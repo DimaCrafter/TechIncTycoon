@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2d81e24af00d6f744bb6b94ab0649976, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.554822
+      value: 11.81
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2d81e24af00d6f744bb6b94ab0649976, type: 3}
       propertyPath: m_LocalPosition.y
@@ -184,6 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3773c12793fbb724a8f93c12cf9e5f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contextMenuTrigger: {fileID: 8958861617465387418}
+  menuPrefab: {fileID: 5864258927307990705, guid: 52588200c597dfd48b34b26f37a93cde, type: 3}
 --- !u!65 &8958861617465387418
 BoxCollider:
   m_ObjectHideFlags: 0

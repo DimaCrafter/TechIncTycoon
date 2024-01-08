@@ -520,6 +520,7 @@ GameObject:
   - component: {fileID: 5041023950408055324}
   - component: {fileID: 1010963068250720315}
   - component: {fileID: 2336417889239916771}
+  - component: {fileID: 4324033742467159353}
   m_Layer: 0
   m_Name: ModulePlace
   m_TagString: Untagged
@@ -607,9 +608,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97afde5691bafc649ad893ea7ad07b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  contextMenuTrigger: {fileID: 2336417889239916771}
   highlightObject: {fileID: 1983065037906524944}
   eniac: {fileID: 4640499537675538868}
   wallMeshRenderer: {fileID: 4588752573323260805}
+  controlMenu: {fileID: 8083251899689440764, guid: 256d13635c6e54e42b5e196e34a74a10, type: 3}
+  assembleMenu: {fileID: 2148901100264799467, guid: 22a2d360afd1274409f839b41c245c57, type: 3}
 --- !u!65 &2336417889239916771
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -631,6 +635,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.2533092, y: 10, z: 8.638706}
   m_Center: {x: -1.1557817, y: 5, z: 0.6806469}
+--- !u!114 &4324033742467159353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376431445742344794}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0.99215686, g: 0.4392157, b: 0.29803923, a: 1}
+  outlineWidth: 3
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &393628981781596364
 GameObject:
   m_ObjectHideFlags: 0
