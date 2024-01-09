@@ -1,43 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class Generate_buttons : MonoBehaviour
-{
+public class Generate_buttons: MonoBehaviour {
     public GameObject referenceBtn;
     public GameObject parentBtn;
-    public bool[,] buttons = new bool[80, 12];
+    private const int COLS = 40;
+    private const int ROWS = 12;
+    public bool[,] buttons = new bool[COLS, ROWS];
     private bool btn_state = false;
-    private static string[] tasks = new string[3] 
-    {
+    private static string[] tasks = new string[] {
         "123",
         "ABC",
-        "1A2B3C" 
+        "1A2B3C",
+        "HELLO",
+        "PUNCH"
     };
+
     public TMP_Text task_text;
     private string cur_task;
-    public void GenerateBtn()
-    {
+    public void GenerateBtn () {
         cur_task = tasks[Random.Range(0, tasks.Length)];
         task_text.text = cur_task;
-        if (btn_state == true)
-        {
-            for (int i = 0; i < 80; i++)
-            {
-                for (int j = 0; j < 12; j++)
-                {
+        if (btn_state == true) {
+            for (int i = 0; i < COLS; i++) {
+                for (int j = 0; j < ROWS; j++) {
                     buttons[i, j] = false;
                 }
             }
-        }
-        else
-        {
-            for (uint j = 0; j < 12; j++)
-            {
-                for (uint i = 0; i < 80; i++)
-                {
+        } else {
+            for (uint j = 0; j < ROWS; j++) {
+                for (uint i = 0; i < COLS; i++) {
                     GameObject newBtn = Instantiate(referenceBtn, parentBtn.transform);
                     var button = newBtn.GetComponent<boolean_btn>();
                     button.x = i;
@@ -49,37 +41,25 @@ public class Generate_buttons : MonoBehaviour
         btn_state = true;
     }
     public TMP_Text tmp;
-    public void ParseMatrix()
-    {
+    public void ParseMatrix () {
         string text = "";
         tmp.text = text;
-        for (int i = 0; i < 80; i++)
-        {
+        for (int i = 0; i < COLS; i++) {
             string symbol = "";
             bool[] _case = new bool[4];
             bool break_point = false;
-            for(int j = 0; j < 12; j++)
-            {
-                if (buttons[i, j] == true && j == 0 && !_case[0] && !_case[1] && !_case[2] && !_case[3])
-                {
+            for (int j = 0; j < ROWS; j++) {
+                if (buttons[i, j] == true && j == 0 && !_case[0] && !_case[1] && !_case[2] && !_case[3]) {
                     _case[0] = true;
-                }
-                else if (buttons[i, j] == true && j == 1 && !_case[0] && !_case[1] && !_case[2] && !_case[3])
-                {
+                } else if (buttons[i, j] == true && j == 1 && !_case[0] && !_case[1] && !_case[2] && !_case[3]) {
                     _case[1] = true;
-                }
-                else if (buttons[i, j] == true && j == 2 && !_case[0] && !_case[1] && !_case[2] && !_case[3])
-                {
+                } else if (buttons[i, j] == true && j == 2 && !_case[0] && !_case[1] && !_case[2] && !_case[3]) {
                     _case[2] = true;
-                }
-                else if (buttons[i, j] == true && j > 2 && !_case[0] && !_case[1] && !_case[2] && !_case[3])
-                {
+                } else if (buttons[i, j] == true && j > 2 && !_case[0] && !_case[1] && !_case[2] && !_case[3]) {
                     _case[3] = true;
                 }
-                if(_case[0] == true && !break_point && buttons[i, j] == true)
-                {
-                    switch (j)
-                    {
+                if (_case[0] == true && !break_point && buttons[i, j] == true) {
+                    switch (j) {
                         case 3:
                             symbol = "A";
                             break_point = true;
@@ -117,11 +97,8 @@ public class Generate_buttons : MonoBehaviour
                             break_point = true;
                             break;
                     }
-                }
-                else if (_case[1] == true && !break_point && buttons[i, j] == true)
-                {
-                    switch (j)
-                    {
+                } else if (_case[1] == true && !break_point && buttons[i, j] == true) {
+                    switch (j) {
                         case 3:
                             symbol = "J";
                             break_point = true;
@@ -159,11 +136,8 @@ public class Generate_buttons : MonoBehaviour
                             break_point = true;
                             break;
                     }
-                }
-                else if (_case[2] == true && !break_point && buttons[i, j] == true)
-                {
-                    switch (j)
-                    {
+                } else if (_case[2] == true && !break_point && buttons[i, j] == true) {
+                    switch (j) {
                         case 3:
                             symbol = "S";
                             break_point = true;
@@ -201,9 +175,7 @@ public class Generate_buttons : MonoBehaviour
                             break_point = true;
                             break;
                     }
-                }
-                else if (_case[3] == true && !break_point && buttons[i, j] == true)
-                {
+                } else if (_case[3] == true && !break_point && buttons[i, j] == true) {
                     if (buttons[i, j] == true)
                         symbol += (j - 2).ToString();
                 }
