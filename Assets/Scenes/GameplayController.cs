@@ -7,7 +7,7 @@ public class GameplayController: MonoBehaviour {
     public GameObject scienceScoreParticle;
     public ModulePlace[] modulePlaces;
 
-    private RectTransform canvasRect;
+    public static RectTransform canvasRect { get; private set; }
     void Start () { 
         canvasRect = GetComponent<RectTransform>();
         RestoreProgress();

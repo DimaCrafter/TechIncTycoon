@@ -11,7 +11,7 @@ public class ResearchTask {
     public int outScienceScore;
 }
 
-public class ResearchModal: MonoBehaviour {
+public class ResearchModal: Modal {
     static ResearchTask[] tasks = {
         new() {
             title = "Появление ENIAC",
@@ -65,9 +65,5 @@ public class ResearchModal: MonoBehaviour {
                 taskDescription.text = task.description;
             });
         }
-    }
-
-    void Update () {
-        
     }
 }

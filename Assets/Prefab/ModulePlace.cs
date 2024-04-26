@@ -4,17 +4,23 @@ public enum ModulePlaceType {
     None, Eniac
 }
 
-public class ModulePlace: ContextedBehaviour {
+public class ModulePlace: ContextedBehaviour<ModulePlace> {
     public GameObject highlightObject;
     public GameObject eniac;
 
-    private ModulePlaceType _type = ModulePlaceType.None; 
+    private ModulePlaceType _type = ModulePlaceType.None;
+
     public ModulePlaceType Type {
         get { return _type; }
         set {
+            _type = value;
+            // Компонент не инициализирован
+            if (meshRenderer == null) {
+                return;
+            }
+
             wallMeshRenderer.enabled = meshRenderer.enabled = value == ModulePlaceType.None;
             eniac.SetActive(value == ModulePlaceType.Eniac);
-            _type = value;
         }
     }
 
@@ -27,8 +33,6 @@ public class ModulePlace: ContextedBehaviour {
         meshRenderer = GetComponent<MeshRenderer>();
         highlightObject.SetActive(false);
         Type = Type;
-
-        InitContexted();
     }
 
     public GameObject controlMenu;

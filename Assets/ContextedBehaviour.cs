@@ -1,48 +1,33 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class ContextedBehaviour: MonoBehaviour, IPointerClickHandler {
-    public Collider contextMenuTrigger;
-    protected Transform canvas;
+public abstract class ContextedBehaviour<Self>: MonoBehaviour, IPointerClickHandler where Self: ContextedBehaviour<Self> {
     protected GameObject menuObject;
-
-    protected void InitContexted () {
-        contextMenuTrigger = GetComponent<Collider>();
-        canvas = GameObject.Find("Canvas").transform;
-    }
+    protected MenuBehaviour<Self> menu;
 
     protected virtual void OnHover (bool isOver) {}
     protected abstract GameObject GetMenuPrefab ();
 
-    private bool _clickedOnMe = false;
     public void OnPointerClick (PointerEventData e) {
         if (e.button != PointerEventData.InputButton.Left) {
             return;
         }
 
-        _clickedOnMe = true;
-
-        menuObject = Instantiate(GetMenuPrefab(), canvas);
-        menuObject.transform.position = Input.mousePosition;
-        contextMenuTrigger.enabled = false;
-
-        OnHover(true);
-    }
-
-    void Update () {
-        if (Input.GetMouseButtonDown(0)) {
-            if (!_clickedOnMe && menuObject != null) {
-                Reset();
-            }
+        if (menuObject != null) {
+            return;
         }
 
-        _clickedOnMe = false;
+        menuObject = Instantiate(GetMenuPrefab(), GameplayController.canvasRect);
+        menuObject.transform.position = Input.mousePosition;
+        menu = menuObject.GetComponent<MenuBehaviour<Self>>();
+        menu.parent = (Self) this;
+
+        OnHover(true);
     }
 
     public void Reset () {
         Destroy(menuObject);
         menuObject = null;
-        contextMenuTrigger.enabled = true;
 
         OnHover(false);
     }

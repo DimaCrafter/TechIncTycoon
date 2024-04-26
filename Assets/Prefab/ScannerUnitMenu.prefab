@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa41d9eede22c8f4d98b0f7ed61751f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  researchModalPrefab: {fileID: 2312030705288024844, guid: 9c7bcbc85d961e6459ddf6c1c2fecce5, type: 3}
 --- !u!1 &6992050191027619816
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +398,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 3207834967050204516, guid: 1de1b48c5d623564a9f2b76e2f40c908, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 6253234840498664802, guid: 1de1b48c5d623564a9f2b76e2f40c908, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -539,6 +544,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 3207834967050204516, guid: 1de1b48c5d623564a9f2b76e2f40c908, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 6253234840498664802, guid: 1de1b48c5d623564a9f2b76e2f40c908, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

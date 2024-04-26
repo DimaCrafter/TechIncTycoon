@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class ScannerUnitBehaviour: ContextedBehaviour {
+public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
     public GameObject menuPrefab;
     private Outline outline;
 
     void Start () {
-        InitContexted();
         outline = GetComponent<Outline>();
     }
 

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class ScannerUnitMenu: MonoBehaviour, IMenu<ScannerUnitBehaviour> {
-    public ScannerUnitBehaviour parent { get; set; }
-
+public class ScannerUnitMenu: MenuBehaviour<ScannerUnitBehaviour> {
+    public GameObject researchModalPrefab;
     public void OnResearchClick () {
+        Modal.Open(researchModalPrefab);
         parent.Reset();
     }
 
     public void OnAssembleClick () {
-
+        parent.Reset();
     }
 }
