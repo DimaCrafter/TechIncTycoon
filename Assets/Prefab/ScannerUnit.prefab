@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3773c12793fbb724a8f93c12cf9e5f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contextMenuTrigger: {fileID: 8958861617465387418}
   menuPrefab: {fileID: 5864258927307990705, guid: 52588200c597dfd48b34b26f37a93cde, type: 3}
+  taskHintPrefab: {fileID: 8311640824037304355, guid: cb17ab35f9be518459dacf41d886e13f, type: 3}
 --- !u!65 &8958861617465387418
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -205,8 +205,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.0576203, y: 5.5519223, z: 1.6730808}
-  m_Center: {x: 0.13883162, y: 2.620447, z: -1.965595e-16}
+  m_Size: {x: 3, y: 5.5, z: 1.7}
+  m_Center: {x: 0.15, y: 2.7, z: 0}
 --- !u!4 &3574115757811651302 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -5736601808885194271, guid: 2d81e24af00d6f744bb6b94ab0649976, type: 3}

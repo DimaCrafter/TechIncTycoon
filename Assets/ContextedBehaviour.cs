@@ -17,7 +17,12 @@ public abstract class ContextedBehaviour<Self>: MonoBehaviour, IPointerClickHand
             return;
         }
 
-        menuObject = Instantiate(GetMenuPrefab(), GameplayController.canvasRect);
+        var prefab = GetMenuPrefab();
+        if (prefab == null) {
+            return;
+        }
+
+        menuObject = Instantiate(prefab, GameplayController.canvasRect);
         menuObject.transform.position = Input.mousePosition;
         menu = menuObject.GetComponent<MenuBehaviour<Self>>();
         menu.parent = (Self) this;

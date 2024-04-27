@@ -2,13 +2,13 @@ using TMPro;
 using UnityEngine;
 
 public class UnitTaskCard: MonoBehaviour {
-    public ResearchTask task;
+    public UnitTask task;
 
-    public TextMeshProUGUI titleText;
-    public TextMeshProUGUI inResearchScoreText;
-    public TextMeshProUGUI inScienceScoreText;
-    public TextMeshProUGUI outResearchScoreText;
-    public TextMeshProUGUI outScienceScoreText;
+    public TMP_Text titleText;
+    public TMP_Text inResearchScoreText;
+    public TMP_Text inScienceScoreText;
+    public TMP_Text outResearchScoreText;
+    public TMP_Text outScienceScoreText;
 
     void Start () {
         titleText.text = task.title;

@@ -2,13 +2,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResearchTask {
+public abstract class UnitTask {
     public string title;
     public string description;
     public int requiredResearchScore;
     public int requiredScienceScore;
     public int outResearchScore;
     public int outScienceScore;
+    public float duration;
+}
+
+public class ResearchTask: UnitTask {
+
 }
 
 public class ResearchModal: Modal {
@@ -19,7 +24,8 @@ public class ResearchModal: Modal {
             requiredResearchScore = 1,
             requiredScienceScore = 2,
             outResearchScore = 3,
-            outScienceScore = 4
+            outScienceScore = 4,
+            duration = 15
         },
         new() {
             title = "Передача данных",
@@ -27,7 +33,8 @@ public class ResearchModal: Modal {
             requiredResearchScore = 8,
             requiredScienceScore = 7,
             outResearchScore = 6,
-            outScienceScore = 5
+            outScienceScore = 5,
+            duration = 15
         },
         new() {
             title = "Моделирование вычислений",
@@ -35,7 +42,8 @@ public class ResearchModal: Modal {
             requiredResearchScore = 9,
             requiredScienceScore = 10,
             outResearchScore = 11,
-            outScienceScore = 12
+            outScienceScore = 12,
+            duration = 30
         }
     };
 
@@ -45,6 +53,7 @@ public class ResearchModal: Modal {
     private ResearchTask selectedTask;
     public TextMeshProUGUI taskTitle;
     public TextMeshProUGUI taskDescription;
+    public ScannerUnitBehaviour unit;
 
     void Start () {
         var topOffset = -4f;
@@ -65,5 +74,12 @@ public class ResearchModal: Modal {
                 taskDescription.text = task.description;
             });
         }
+    }
+
+    public void TakeTask () {
+        if (selectedTask == null) return;
+
+        unit.SetTask(selectedTask);
+        Close();
     }
 }
