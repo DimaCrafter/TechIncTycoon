@@ -6,6 +6,8 @@ public class GameplayController: MonoBehaviour {
     public ScoreBulb scienceScoreBulb;
     public GameObject scienceScoreParticle;
     public ModulePlace[] modulePlaces;
+    public DialogController dialog;
+    public GameObject defaultScoreSource;
 
     public static RectTransform canvasRect { get; private set; }
     public static GameplayController instance { get; private set; }
@@ -13,14 +15,20 @@ public class GameplayController: MonoBehaviour {
         instance = this;
         canvasRect = GetComponent<RectTransform>();
         RestoreProgress();
+        Scenario.Play();
     }
 
     void RestoreProgress () {
-        modulePlaces[2].Type = ModulePlaceType.Eniac;
-        modulePlaces[3].Type = ModulePlaceType.Eniac;
+        for (var i = 0; i < modulePlaces.Length; i++) {
+            modulePlaces[i].Type = Scenario.gameState.modulePlaceTypes[i];
+        }
     }
 
     public void IncrementScienceScore (GameObject source, int delta) {
+        if (source == null) {
+            source = defaultScoreSource;
+        }
+
         var particleObject = Instantiate(scienceScoreParticle, transform);
         var particle = particleObject.GetComponent<ScoreBulbParticle>();
 

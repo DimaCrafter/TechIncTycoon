@@ -67,6 +67,7 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
             }
 
             Debug.Log("Task done!");
+            Scenario.Fire(Scenario.Trigger.ResearchTaskStart);
         }
 
         if (taskHint != null) {
