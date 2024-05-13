@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum ModulePlaceType {
@@ -21,6 +22,11 @@ public class ModulePlace: ContextedBehaviour<ModulePlace> {
 
             wallMeshRenderer.enabled = meshRenderer.enabled = value == ModulePlaceType.None;
             eniac.SetActive(value == ModulePlaceType.Eniac);
+
+            if (GameplayController.instance == null) return;
+
+            var i = Array.IndexOf(GameplayController.instance.modulePlaces, this);
+            Scenario.gameState.modulePlaceTypes[i] = value;
         }
     }
 

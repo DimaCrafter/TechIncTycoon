@@ -10,4 +10,10 @@ public class GameState {
         ModulePlaceType.Eniac,
         ModulePlaceType.None
     };
+
+    public bool[] scannerPlace = new bool[] {
+        false,
+        false,
+        false
+    };
 }

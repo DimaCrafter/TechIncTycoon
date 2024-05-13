@@ -6,6 +6,7 @@ public class GameplayController: MonoBehaviour {
     public ScoreBulb scienceScoreBulb;
     public GameObject scienceScoreParticle;
     public ModulePlace[] modulePlaces;
+    public ScannerPlace[] scannerPlaces;
     public DialogController dialog;
     public GameObject defaultScoreSource;
 
@@ -21,6 +22,10 @@ public class GameplayController: MonoBehaviour {
     void RestoreProgress () {
         for (var i = 0; i < modulePlaces.Length; i++) {
             modulePlaces[i].Type = Scenario.gameState.modulePlaceTypes[i];
+        }
+
+        for (var i = 0; i < scannerPlaces.Length; i++) {
+            scannerPlaces[i].Used = Scenario.gameState.scannerPlace[i];
         }
     }
 
