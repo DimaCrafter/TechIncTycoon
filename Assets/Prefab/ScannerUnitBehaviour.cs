@@ -14,6 +14,8 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
     private TaskProgressHint taskHint;
     private UnitTask task;
     private float taskRemain;
+    private UnitTaskEvent taskEvent;
+    private int taskEventIndex;
 
     private Outline outline;
     private new BoxCollider collider;
@@ -24,8 +26,22 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
     }
 
     public void SetTask (UnitTask newTask) {
+        if (newTask.requiredResearchScore > GameplayController.instance.researchScoreBulb.value) {
+            return;
+        } else {
+            GameplayController.instance.DecrementResearchScore(newTask.requiredResearchScore);
+        }
+
+        if (newTask.requiredScienceScore > GameplayController.instance.scienceScoreBulb.value) {
+            return;
+        } else {
+            GameplayController.instance.DecrementScienceScore(newTask.requiredScienceScore);
+        }
+
         task = newTask;
         taskRemain = task.duration;
+        taskEventIndex = 0;
+        taskEvent = task.events[0];
     }
 
     protected override void OnHover (bool isOver) {
@@ -55,10 +71,26 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
 
     private void UpdateTaskStatus () {
         if (taskRemain > 0) {
-            taskRemain -= Time.deltaTime;
-            /*if (Mathf.Floor(taskRemain) % 2 == 0) {
-                GameplayController.instance.IncrementScienceScore(gameObject, 1);
-            }*/
+            taskRemain -= Time.deltaTime * GameplayController.instance.ScannerSpeed;
+
+            if (taskEvent != null) {
+                var time = Mathf.FloorToInt(task.duration - taskRemain);
+                if (taskEvent.time == time) {
+                    if (taskEvent.research != 0) {
+                        GameplayController.instance.IncrementResearchScore(gameObject, taskEvent.research);
+                    }
+
+                    if (taskEvent.science != 0) {
+                        GameplayController.instance.IncrementScienceScore(gameObject, taskEvent.science);
+                    }
+
+                    if (++taskEventIndex == task.events.Length) {
+                        taskEvent = null;
+                    } else {
+                        taskEvent = task.events[taskEventIndex];
+                    }
+                }
+            }
         } else {
             task = null;
             if (taskHint != null) {

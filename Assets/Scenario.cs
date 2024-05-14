@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Scenario: MonoBehaviour {
     public enum Trigger {
+        None,
         DialogClose,
         ScannerInstall,
         ResearchTaskStart

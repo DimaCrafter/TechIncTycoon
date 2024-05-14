@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using TMPro;
+using UnityEngine.Events;
 
 public class generate_quiz : MonoBehaviour
 {
     public ToggleGroup toggleGroup;
     public TMP_Text output, question;
     public Toggle toggle_1, toggle_2, toggle_3, toggle_4;
-    private bool is_open = false;
-    private string[] questions = new string[]
+    public string[] questions = new string[]
     {
         "Что такое перфокарта в контексте компьютеров?",
         "Какой изобретатель связан с созданием перфокарт в 1890 году?",
@@ -24,7 +22,7 @@ public class generate_quiz : MonoBehaviour
         "Какова была вычислительная мощность ENIAC?",
         "Какие размеры имел ENIAC?"
     };
-    private string[] right_ans = new string[]
+    public string[] right_ans = new string[]
     {
         "Перфокарта — это перфорированная карта с информацией для программирования",
         "Герман Холлерит",
@@ -37,7 +35,7 @@ public class generate_quiz : MonoBehaviour
         "Около 5000 операций в секунду",
         "Около 30х50 футов"
     };
-    private string[] wrong_ans_1 = new string[]
+    public string[] wrong_ans_1 = new string[]
     {
         "Перфокарта — устройство для вывода цветных изображений на мониторе.",
         "Чарльз Бэббидж",
@@ -50,7 +48,7 @@ public class generate_quiz : MonoBehaviour
         "1 миллион операций в секунду",
         "10х10 метров"
     };
-    private string[] wrong_ans_2 = new string[]
+    public string[] wrong_ans_2 = new string[]
     {
         "Перфокарта — вид магнитной ленты для хранения данных.",
         "Алан Тьюринг",
@@ -63,7 +61,7 @@ public class generate_quiz : MonoBehaviour
         "10 000 операций в секунду",
         "5х5 футов"
     };
-    private string[] wrong_ans_3 = new string[]
+    public string[] wrong_ans_3 = new string[]
     {
         "Перфокарта — программа для защиты компьютера от вирусов.",
         "Стивен Хокинг",
@@ -76,17 +74,21 @@ public class generate_quiz : MonoBehaviour
         "100 операций в секунду",
         "100х100 миллиметров"
     };
-    public static int rand_num;
-    public void Generate_Question()
-    {
-        rand_num = Random.Range(0, questions.Length);
-        question.text = questions[rand_num];
+
+    private int questionIndex = -1;
+    public void Generate_Question () {
+        if (++questionIndex == questions.Length) {
+            onDone.Invoke();
+            return;
+        }
+
+        question.text = questions[questionIndex];
         string[] ans_pool = new string[4];
 
-        ans_pool[0] = right_ans[rand_num];
-        ans_pool[1] = wrong_ans_1[rand_num];
-        ans_pool[2] = wrong_ans_2[rand_num];
-        ans_pool[3] = wrong_ans_3[rand_num];
+        ans_pool[0] = right_ans[questionIndex];
+        ans_pool[1] = wrong_ans_1[questionIndex];
+        ans_pool[2] = wrong_ans_2[questionIndex];
+        ans_pool[3] = wrong_ans_3[questionIndex];
 
         string tmp, tmp1, tmp2, tmp3;
         tmp = ans_pool[Random.Range(0, 4)];
@@ -104,12 +106,33 @@ public class generate_quiz : MonoBehaviour
             tmp = ans_pool[Random.Range(0, 4)];
         toggle_4.GetComponentInChildren<Text>().text = tmp;
     }
-    public void Check()
-    {
+
+    private float outputVisibleTime = 0;
+    void Update () {
+        if (outputVisibleTime != 0) {
+            if (outputVisibleTime > 0) {
+                outputVisibleTime -= Time.deltaTime;
+            } else {
+                outputVisibleTime = 0;
+                output.text = "";
+
+                Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
+                if (toggle.GetComponentInChildren<Text>().text == right_ans[questionIndex]) {
+                    Generate_Question();
+                }
+            }
+        }
+    }
+
+    public UnityEvent onDone;
+    public void Check () {
         Toggle toggle = toggleGroup.ActiveToggles().FirstOrDefault();
-        if (toggle.GetComponentInChildren<Text>().text == right_ans[rand_num])
-            output.text = "Ответ верный";
-        else
-            output.text = "Ответ не верный";
+        if (toggle.GetComponentInChildren<Text>().text == right_ans[questionIndex]) {
+            output.text = "Ответ верный!";
+        } else {
+            output.text = "Неправильный ответ";
+        }
+
+        outputVisibleTime = 1.75f;
     }
 }

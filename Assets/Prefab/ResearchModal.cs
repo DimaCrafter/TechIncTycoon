@@ -10,6 +10,14 @@ public abstract class UnitTask {
     public int outResearchScore;
     public int outScienceScore;
     public float duration;
+    public UnitTaskEvent[] events;
+}
+
+public class UnitTaskEvent {
+    public int time;
+    public int research;
+    public int science;
+    public Scenario.Trigger trigger;
 }
 
 public class ResearchTask: UnitTask {
@@ -21,11 +29,24 @@ public class ResearchModal: Modal {
         new() {
             title = "Появление ENIAC",
             description = "Тут сказано, что это первый электронный цифровой вычислитель общего назначения, который можно было перепрограммировать для решения широкого спектра задач. Звучит интересно, жаль, что не все модули хорошо сохранились.\r\n\r\nБудем исследовать оставшиеся модули и данные о создании и использовании ENIAC, чтобы лучше понять какие технологии были доступны в ту эпоху и какие решения принимали учёные и инженеры для решения проблем того времени.",
-            requiredResearchScore = 1,
-            requiredScienceScore = 2,
-            outResearchScore = 3,
+            requiredResearchScore = 0,
+            requiredScienceScore = 3,
+            outResearchScore = 14,
             outScienceScore = 4,
-            duration = 15
+            duration = 145,
+            events = new UnitTaskEvent[] {
+                new() { time = 2, research = 1 },
+                new() { time = 10, research = 2 },
+                new() { time = 16, research = 1, science = 2 },
+                new() { time = 48, research = 4 },
+                new() { time = 52, research = 2 },
+                new() { time = 68, research = 1 },
+                new() { time = 80, research = 3 },
+                new() { time = 101, research = 2, science = 2 },
+                new() { time = 115, research = 1 },
+                new() { time = 130, research = 2 },
+                new() { time = 140, research = 1 }
+            }
         },
         new() {
             title = "Передача данных",
