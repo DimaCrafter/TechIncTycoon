@@ -10,6 +10,8 @@ public class GameplayController: MonoBehaviour {
     public DialogController dialog;
     public GameObject defaultScoreSource;
 
+    public GameObject[] modalPrefabs;
+
     public static RectTransform canvasRect { get; private set; }
     public static GameplayController instance { get; private set; }
     void Start () {
@@ -21,7 +23,7 @@ public class GameplayController: MonoBehaviour {
 
     void Update () {
         if (Time.timeScale != 0) {
-            Time.timeScale = Input.GetKey(KeyCode.F7) ? 5 : (Input.GetKey(KeyCode.F6) ? 0.01f : 1);
+            Time.timeScale = Input.GetKey(KeyCode.F7) ? 8 : (Input.GetKey(KeyCode.F6) ? 0.01f : 1);
         }
     }
 

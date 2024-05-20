@@ -7,8 +7,13 @@ public class Scenario: MonoBehaviour {
         None,
         DialogClose,
         ScannerInstall,
-        ResearchTaskStart
-
+        ResearchTaskStart,
+        EniacDocsEvent,
+        WiresEvent,
+        PunchcardEvent,
+        PunchcardEventEnd,
+        SwitchesEvent,
+        EniacEnd
     }
 
     public abstract class Step {
@@ -68,6 +73,27 @@ public class Scenario: MonoBehaviour {
         }
     }
 
+    public class ModalStep<T>: Step where T : Modal {
+        public uint modalIndex;
+        public ModalStep (uint modalIndex) {
+            this.modalIndex = modalIndex;
+        }
+
+        public override Task Execute () {
+            var prefab = GameplayController.instance.modalPrefabs[modalIndex];
+            var modal = Modal.Open<T>(prefab);
+            Time.timeScale = 0;
+
+            var taskSource = new TaskCompletionSource<object>();
+            modal.onClose += () => {
+                Time.timeScale = 1;
+                taskSource.SetResult(null);
+            };
+            
+            return taskSource.Task;
+        }
+    }
+
     public class TriggerListener {
         public Trigger trigger;
         public TaskCompletionSource<object> handler;
@@ -99,7 +125,7 @@ public class Scenario: MonoBehaviour {
 
     public static GameState gameState { get; private set; }
     static Scenario () {
-        gameState = FileManager.LoadJson<GameState>("game_state.json");
+        gameState = new GameState(); // FileManager.LoadJson<GameState>("game_state.json");
     }
 
     public static bool saveLocked { get; private set; } = true;
@@ -117,49 +143,83 @@ public class Scenario: MonoBehaviour {
         new DialogStep("Помогать в изучении будут рабочие сканеры - упрощённая модель робота без ИИ, но с хорошим механизмом построения логических связей и детального сбора данных."),
         new DialogStep("Такие сейчас исследуют прошлое человечества в целом, поэтому и тут могут пригодится. И не думайте, что без ИИ они неживые! Они живые, просто... не могут показать..."),
         new DialogStep("..."),
-        new DialogStep("Ближе к делу. <как установить сканер>."),
+        new DialogStep("Ближе к делу. Рядом с модулями есть выделенные места для установки сканера. Выберите любое и установите первый сканер."),
         new ScienceRewardStep(3),
 
         new WaitTriggerStep(Trigger.ScannerInstall),
-        new DialogStep("Дадим ему первое задание: Исследование. Исследования дают очки исследований, необходимые для <...>."),
+        new DialogStep("Дадим ему первое задание: Исследование «Появление ENIAC». Исследования дают очки исследований, необходимые для улучшения лаборатории."),
 
         new WaitTriggerStep(Trigger.ResearchTaskStart),
         new DialogStep("Отлично! Иногда во время исследования у сканера может появиться важная информация или возникнуть какая-то сложность, которую нужно преодолеть для продолжения."),
-        new DialogStep("Внимание! Обнаружена неисправность в системе ENIAC. Требуется немедленное вмешательство."),
-        new DialogStep("Произошел сбой в соединениях. Некорректное подключение проводов вызвало короткое замыкание."),
-        new DialogStep("Для восстановления работы ENIAC необходимо правильно настроить провода. Пожалуйста, следуйте инструкциям на экране."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Триггер с WiresGame
+
+        new WaitTriggerStep(Trigger.EniacDocsEvent),
+        new ModalStep<Modal>(0),
+
+        new WaitTriggerStep(Trigger.WiresEvent),
+        new DialogStep("Внимание! Обнаружена неисправность в системе ENIAC. Некорректное подключение проводов вызвало короткое замыкание. Требуется немедленное вмешательство."),
+        new DialogStep("Для восстановления работы ENIAC необходимо правильно настроить передачу данных."),
+        new ModalStep<Modal>(1),
         new DialogStep("Проблема миновала, продолжайте исследования в том же духе"),
+
+        new WaitTriggerStep(Trigger.PunchcardEvent),
         new DialogStep("Теперь нам нужно настроить перфокарту для следующего этапа исследования."),
         new DialogStep("Перфокарта - это носитель информации, использующийся для ввода данных и программ в вычислительные машины. Каждое отверстие на перфокарте соответствует определённой команде или данным."),
-        new DialogStep("Следуйте инструкциям для настройки перфокарты"),
-        new DialogStep("Поместите перфокарту в считывающее устройство."),
-        new DialogStep("Введите нужные команды, пробивая отверстия в соответствующих позициях."),
-        new DialogStep("Убедитесь, что все данные введены корректно."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Триггер с Перфокартой
-        new DialogStep("Отлично! Отныне вы знаете как работать с перфокартами, в будущем этот навык вам пригодится."),
-        new DialogStep("В данный момент треуется откаллибровать ENIAC. Хоть данная процедура и выглядит просто на первый взгляд, будьте внимательны, в любой момент может возникнуть неисправность."),
-        new DialogStep("В случае успешной калибровки эффективность модуля возрастет, что позволит нам быстрее работать."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Провода, первокарта, провода
-        new DialogStep("Калибровка прошла успешно."),
-        new DialogStep("Теперь мы можем переходить к следующему этапу."),
-        new DialogStep("Нам требуется настроить ENIAC для работы с конкретными программами, для этого используются тумблеры на стене."),
+        new DialogStep("Следуйте найденным инструкциям для настройки перфокарты"),
+        //new DialogStep("Поместите перфокарту в считывающее устройство."),
+        //new DialogStep("Введите нужные команды, пробивая отверстия в соответствующих позициях."),
+        //new DialogStep("Убедитесь, что все данные введены корректно."),
+        new ModalStep<Modal>(2),
+
+        new WaitTriggerStep(Trigger.PunchcardEventEnd),
+        new DialogStep("Отлично! Теперь мы знаем как работать с перфокартами, думаю, что этот навык будет нам полезен."),
+        new DialogStep("Сейчас треуется откалибровать ENIAC. Хоть данная процедура и выглядит просто на первый взгляд, будьте внимательны, в любой момент может возникнуть неисправность."),
+        new DialogStep("В случае успешной калибровки эффективность модуля возрастет, что позволит нам быстрее работать!"),
+
+        new WaitTriggerStep(Trigger.WiresEvent),
+        new ModalStep<Modal>(1),
+
+        new WaitTriggerStep(Trigger.PunchcardEvent),
+        new ModalStep<Modal>(2),
+
+        new WaitTriggerStep(Trigger.WiresEvent),
+        new ModalStep<Modal>(1),
+
+        new DialogStep("Калибровка прошла успешно. Теперь мы можем переходить к следующему этапу."),
+        new WaitTriggerStep(Trigger.SwitchesEvent),
+
+        new DialogStep("Нам требуется настроить ENIAC для работы с конкретными программами, для этого используются тумблеры на панели модуля. Изучите их для начала."),
         new DialogStep("Программирование на первый взгляд может показаться чем-то сложным, однако внимательно прочитав инструкция я уверен, вы справитесь."),
         new DialogStep("Первая серия тумблеров отвечает за переменную в нашем уравнении. При исполнении программы переменная примет присвоенное ей значение."),
         new DialogStep("Вторая серия определяет какая оперция будет исполнена. В данный момент нас доступно сложение, выичитание, умножение и деление."),
         new DialogStep("Третья отвечает за вторую переменную в уравнениее, четвертая задает константу. Константа - это число которое не изменяется в ходе исполнения программы."),
         new DialogStep("Пятая серия тумблеров отвечает за то, куда поместится результат исполнения программы. Она так же является переменной из которой программа может извлекать значение."),
-        new DialogStep("Звучит сложно, однако на практике станет проще. Попробуйте написать свою первую программу."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Программирование ENIAC
-        new DialogStep("Так держать. Осталась всего пара шагов и тебя можно будет назвать экспертом ENIAC."),
-        new DialogStep("Продалжай исследовать модуль."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Перфокарта, программирование
-        new DialogStep("Даю вам последние задание. Покажите все, чему научились на данный момент."),
-        new DialogStep("Проведите полный тех. осмотр модуля и напишите еще одну программу."),
-        new WaitTriggerStep(Trigger.ResearchTaskStart), //Все подряд
-        new DialogStep("Поздравляю! На данный момент у меня нет к вам новых заданий. Теперь вы можете считать себя специалистом ENIAC"),
-        new SaveStep(false)
+        new DialogStep("Звучит сложно, однако на практике станет проще. Попробуйте написать свою первую программу во время следующего исследования."),
+        new ModalStep<Modal>(3),
+
+        new DialogStep("Так держать. Осталась всего пара шагов и вас можно будет назвать экспертом ENIAC."),
+        new DialogStep("Продалжайте исследовать модуль."),
+
+        //new WaitTriggerStep(Trigger.ResearchTaskStart), //Перфокарта, программирование
+        //new DialogStep("Даю вам последние задание. Покажите все, чему научились на данный момент."),
+        //new DialogStep("Проведите полный тех. осмотр модуля и напишите еще одну программу."),
+
+        new WaitTriggerStep(Trigger.WiresEvent),
+        new ModalStep<Modal>(1),
+
+        new WaitTriggerStep(Trigger.WiresEvent),
+        new ModalStep<Modal>(1),
+
+        new WaitTriggerStep(Trigger.PunchcardEvent),
+        new ModalStep<Modal>(2),
+
+        new WaitTriggerStep(Trigger.SwitchesEvent),
+        new ModalStep<Modal>(3),
+
+        new WaitTriggerStep(Trigger.EniacEnd),
+        new DialogStep("Поздравляю! На данный момент было собрано достаточно данных. Теперь вы можете считать себя специалистом ENIAC!"),
+        new ModalStep<Modal>(4)
     };
+
     public static async void Play () {
         for (; gameState.scenarioStep < steps.Length; gameState.scenarioStep++) {
             var step = steps[gameState.scenarioStep];

@@ -3267,6 +3267,7 @@ GameObject:
   - component: {fileID: 5991663805060052949}
   - component: {fileID: 7110914422815687504}
   - component: {fileID: 2328819354036865699}
+  - component: {fileID: 7465101466047091798}
   m_Layer: 5
   m_Name: WiresGame
   m_TagString: Untagged
@@ -3383,3 +3384,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7465101466047091798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9186223591195980558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96c462b10e19d840b0be74c109d5dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -42,6 +42,8 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
         taskRemain = task.duration;
         taskEventIndex = 0;
         taskEvent = task.events[0];
+
+        Scenario.Fire(Scenario.Trigger.ResearchTaskStart);
     }
 
     protected override void OnHover (bool isOver) {
@@ -84,6 +86,10 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
                         GameplayController.instance.IncrementScienceScore(gameObject, taskEvent.science);
                     }
 
+                    if (taskEvent.trigger != Scenario.Trigger.None) {
+                        Scenario.Fire(taskEvent.trigger);
+                    }
+
                     if (++taskEventIndex == task.events.Length) {
                         taskEvent = null;
                     } else {
@@ -93,13 +99,12 @@ public class ScannerUnitBehaviour: ContextedBehaviour<ScannerUnitBehaviour> {
             }
         } else {
             task = null;
+            ResearchModal.availTaskIndex++;
+
             if (taskHint != null) {
                 Destroy(taskHint.gameObject);
                 taskHint = null;
             }
-
-            Debug.Log("Task done!");
-            Scenario.Fire(Scenario.Trigger.ResearchTaskStart);
         }
 
         if (taskHint != null) {

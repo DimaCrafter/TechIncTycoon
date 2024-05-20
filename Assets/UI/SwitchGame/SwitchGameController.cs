@@ -34,6 +34,8 @@ public class SwitchGameController: MonoBehaviour {
     }
 
     void OnStateUpdate () {
+        var allCorrect = true;
+
         for (var i = 0; i < requiredStates.Length; i++) {
             var correct = false;
             foreach (var line in lines) {
@@ -44,6 +46,13 @@ public class SwitchGameController: MonoBehaviour {
             }
 
             equations[i].ToggleCorrect(correct);
+            if (!correct) {
+                allCorrect = false;
+            }
+        }
+
+        if (allCorrect) {
+            GetComponent<Modal>().Close();
         }
     }
 }

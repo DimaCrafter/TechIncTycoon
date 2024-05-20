@@ -18,7 +18,7 @@ public class Generate_buttons: MonoBehaviour {
 
     public TMP_Text task_text;
     private string cur_task;
-    public void GenerateBtn () {
+    void Start () {
         cur_task = tasks[Random.Range(0, tasks.Length)];
         task_text.text = cur_task;
         if (btn_state == true) {
@@ -183,7 +183,9 @@ public class Generate_buttons: MonoBehaviour {
             text += symbol;
         }
         tmp.text = text;
-        if (text == cur_task)
+        if (text == cur_task) {
             task_text.text = "Done";
+            GetComponent<Modal>().Close();
+        }
     }
 }

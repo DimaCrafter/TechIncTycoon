@@ -111,7 +111,7 @@ public class generate_quiz : MonoBehaviour
     void Update () {
         if (outputVisibleTime != 0) {
             if (outputVisibleTime > 0) {
-                outputVisibleTime -= Time.deltaTime;
+                outputVisibleTime -= Time.unscaledDeltaTime;
             } else {
                 outputVisibleTime = 0;
                 output.text = "";

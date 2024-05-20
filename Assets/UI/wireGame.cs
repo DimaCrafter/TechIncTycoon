@@ -360,19 +360,14 @@ public class wireGame : MonoBehaviour
             }
         }
     }
-        void Start()
-    {
+    void Start() {
         SetRandomAnsIndexes();
         SetRandomIndexes();
         SetWires();
         ShowTasks();
     }
-    private void FinishGame()
-    {
-        obj.SetActive(false);
-    }
-    void Update()
-    {
-        
+
+    private void FinishGame() {
+        GetComponent<Modal>().Close();
     }
 }
