@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -125,7 +126,15 @@ public class Scenario: MonoBehaviour {
 
     public static GameState gameState { get; private set; }
     static Scenario () {
-        gameState = new GameState(); // FileManager.LoadJson<GameState>("game_state.json");
+        var gameStateFile = "game_state.json";
+        foreach (var arg in Environment.GetCommandLineArgs()) {
+            if (arg.StartsWith("--player:")) {
+                gameStateFile = arg[9..] + "." + gameState;
+                break;
+            }
+        }
+
+        gameState = FileManager.LoadJson<GameState>(gameStateFile);
     }
 
     public static bool saveLocked { get; private set; } = true;
